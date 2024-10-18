@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import HeroImage from "@/assets/hero.png";
 import { DateRange } from "react-day-picker";
 import HomeCombo from "@/components/home/HomeCombo";
-import DateRangeSelector from "@/components/home/DateRangeSelector";
+import DateRangeSelector from "@/components/DateRangeSelector";
 import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
