@@ -1,31 +1,17 @@
-import { useState } from "react";
-import { CalendarIcon, CheckIcon, ChevronsUpDown } from "lucide-react";
+import React from "react";
+import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import {
-    Command,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-} from "@/components/ui/command";
+
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import HeroImage from "@/assets/hero.png";
-
-const homes = [
-    { label: "Dom 1", value: "dom1" },
-    { label: "Dom 2", value: "dom2" },
-    { label: "Dom 3", value: "dom3" },
-    // Dodajte više domova po potrebi
-];
+import { DateRange } from "react-day-picker";
+import HomeCombo from "@/components/combobox/HomeCombo";
 
 export default function HomePage() {
-    const [dateFrom, setDateFrom] = useState();
-    const [dateTo, setDateTo] = useState();
-    const [open, setOpen] = useState(false);
-    const [selectedHome, setSelectedHome] = useState("");
+    const [dateRange, setDateRange] = React.useState<DateRange | undefined>(undefined);
 
     return (
         <>
@@ -33,7 +19,6 @@ export default function HomePage() {
                 <img
                     src={HeroImage}
                     alt="Hero slika"
-                    fetchPriority="high"
                     className="absolute inset-0 w-full h-full object-cover"
                 />
             </div>
@@ -42,92 +27,37 @@ export default function HomePage() {
                     <h2 className="text-4xl font-bold text-center mb-8">
                         Pretraži dostupne društvene domove
                     </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <Popover>
                             <PopoverTrigger asChild>
                                 <Button
                                     variant={"outline"}
                                     className={cn(
                                         "w-full justify-start text-left font-normal",
-                                        !dateFrom && "text-muted-foreground"
+                                        !dateRange?.from && "text-muted-foreground"
                                     )}
                                 >
                                     <CalendarIcon className="mr-2 h-4 w-4" />
-                                    {dateFrom ? format(dateFrom, "PPP") : <span>Od datuma</span>}
+                                    {dateRange?.from ? (
+                                        <span>
+                                            {format(dateRange.from, "PP")} -{" "}
+                                            {dateRange.to ? format(dateRange.to, "PP") : "..."}
+                                        </span>
+                                    ) : (
+                                        <span>Odaberi raspon datuma</span>
+                                    )}
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-auto p-0">
                                 <Calendar
-                                    mode="single"
-                                    selected={dateFrom}
-                                    onSelect={setDateFrom}
+                                    mode="range"
+                                    selected={dateRange}
+                                    onSelect={setDateRange}
                                     initialFocus
                                 />
                             </PopoverContent>
                         </Popover>
-                        <Popover>
-                            <PopoverTrigger asChild>
-                                <Button
-                                    variant={"outline"}
-                                    className={cn(
-                                        "w-full justify-start text-left font-normal",
-                                        !dateTo && "text-muted-foreground"
-                                    )}
-                                >
-                                    <CalendarIcon className="mr-2 h-4 w-4" />
-                                    {dateTo ? format(dateTo, "PPP") : <span>Do datuma</span>}
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0">
-                                <Calendar mode="single" selected={dateTo} initialFocus />
-                            </PopoverContent>
-                        </Popover>
-                        <Popover open={open} onOpenChange={setOpen}>
-                            <PopoverTrigger asChild>
-                                <Button
-                                    variant="outline"
-                                    role="combobox"
-                                    aria-expanded={open}
-                                    className="w-full justify-between"
-                                >
-                                    {selectedHome
-                                        ? homes.find(home => home.value === selectedHome)?.label
-                                        : "Odaberi dom"}
-                                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-full p-0">
-                                <Command>
-                                    <CommandInput placeholder="Pretraži domove..." />
-                                    <CommandEmpty>Nema pronađenih domova.</CommandEmpty>
-                                    <CommandGroup>
-                                        {homes.map(home => (
-                                            <CommandItem
-                                                key={home.value}
-                                                onSelect={currentValue => {
-                                                    setSelectedHome(
-                                                        currentValue === selectedHome
-                                                            ? ""
-                                                            : currentValue
-                                                    );
-                                                    setOpen(false);
-                                                }}
-                                            >
-                                                <CheckIcon
-                                                    className={cn(
-                                                        "mr-2 h-4 w-4",
-                                                        selectedHome === home.value
-                                                            ? "opacity-100"
-                                                            : "opacity-0"
-                                                    )}
-                                                />
-                                                {home.label}
-                                            </CommandItem>
-                                        ))}
-                                    </CommandGroup>
-                                </Command>
-                            </PopoverContent>
-                        </Popover>
+                        <HomeCombo />
                     </div>
                     <Button className="w-full mt-4" size="lg">
                         Pretraži
