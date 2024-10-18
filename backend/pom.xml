@@ -30,6 +30,10 @@
 		<java.version>21</java.version>
 		<flyway-version>10.10.0</flyway-version>
 		<minio-version>8.5.1</minio-version>
+		<version.mapstruct>1.5.5.Final</version.mapstruct>
+		<version.lombok-mapstruct-binding>0.2.0</version.lombok-mapstruct-binding>
+		<version.mapstruct-processor>1.5.5.Final</version.mapstruct-processor>
+		<version.lombok>1.18.26</version.lombok>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -76,13 +80,56 @@
 			<version>${minio-version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${version.lombok}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>${version.mapstruct}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
 		<plugins>
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${lombok.version}</version>
+						</path>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok-mapstruct-binding</artifactId>
+							<version>${version.lombok-mapstruct-binding}</version>
+						</path>
+						<path>
+							<groupId>org.mapstruct</groupId>
+							<artifactId>mapstruct-processor</artifactId>
+							<version>${version.mapstruct-processor}</version>
+						</path>
+					</annotationProcessorPaths>
+					<compilerArgs>
+						<arg>-Amapstruct.defaultComponentModel=spring</arg>
+						<arg>-Amapstruct.defaultInjectionStrategy=constructor</arg>
+						<arg>-Amapstruct.unmappedTargetPolicy=ERROR</arg>
+						<arg>-Amapstruct.verbose=true</arg>
+						<arg>-Amapstruct.showWarnings=true</arg>
+					</compilerArgs>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
