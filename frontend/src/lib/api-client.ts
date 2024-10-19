@@ -25,9 +25,13 @@ class ApiClient {
                 console.log("error", message);
 
                 if (error.response?.status === 401) {
-                    const searchParams = new URLSearchParams();
-                    const redirectTo = searchParams.get("redirectTo");
-                    window.location.href = `/login?redirectTo=${redirectTo}`;
+                    if (localStorage.getItem("token")) {
+                        localStorage.removeItem("token");
+                    }
+                    window.location.href = `/unauthorized`;
+                }
+                if (error.response?.status === 403) {
+                    window.location.href = `/403`;
                 }
                 return Promise.reject(error);
             }

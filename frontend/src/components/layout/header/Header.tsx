@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import Logo from "@/assets/logo.svg";
-import LoginDialog from "@/components/auth/login/Login"; // Pretpostavljamo da imate ovu komponentu
+import AuthDialog from "@/components/auth/AuthDialog";
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -16,7 +16,7 @@ const Header = () => {
     };
 
     return (
-        <header className="sticky top-0 z-50 flex justify-between items-center p-4 bg-white shadow">
+        <header className="sticky top-0 z-50 flex justify-between items-center px-8 py-4 bg-white shadow">
             <Link to="/domovi">
                 <span className="text-lg text-blue-800">Pregled domova</span>
             </Link>
@@ -34,7 +34,7 @@ const Header = () => {
                     Prijava
                 </Button>
             </nav>
-            <LoginDialog isOpen={isOpen} onClose={closeDialog} />
+            <AuthDialog isOpen={isOpen} onClose={closeDialog} />
         </header>
     );
 };
