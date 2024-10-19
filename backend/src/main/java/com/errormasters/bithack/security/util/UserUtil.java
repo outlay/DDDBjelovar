@@ -6,12 +6,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 public class UserUtil {
 
-    public static Long getCurrentUserId() {
+    public static String getCurrentUserEmail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
-            if (authentication.getPrincipal() instanceof DashboardUserDetails) {
-                DashboardUserDetails userDetails = (DashboardUserDetails) authentication.getPrincipal();
-                return userDetails.getId();
+            if (authentication.getPrincipal() instanceof DashboardUserDetails userDetails) {
+                return userDetails.getEmail();
             }
         }
         return null;
