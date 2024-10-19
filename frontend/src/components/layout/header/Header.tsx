@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import Logo from "@/assets/logo.svg";
+
 import AuthDialog from "@/components/auth/AuthDialog";
 import { useApp } from "@/routes/app-context";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -13,7 +13,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { UserResponse } from "@/models/user";
+import { UserResponse, UserRole } from "@/models/user";
 
 const getInitials = (user: UserResponse | undefined) => {
     if (user) {
@@ -42,24 +42,31 @@ const Header = () => {
     };
 
     const initials = getInitials(jwtResponse?.user);
+    const role = jwtResponse?.user.role;
 
     return (
         <header className="sticky top-0 z-50 flex justify-between items-center px-8 py-4 bg-white shadow">
-            <Link to="/domovi">
-                <span className="text-lg text-blue-800">Pregled domova</span>
-            </Link>
-            <div className="flex items-center">
-                <Link to="/">
-                    <img className="h-12 w-auto" src={Logo} alt="Logo" />
+            <div className="flex items-center justify-center gap-4">
+                <Link to="/" className="">
+                    <span className="text-2xl font-bold text-blue-600 tracking-wider">DDB</span>
                 </Link>
+
+                <Link to="/domovi">
+                    <span className="text-lg text-blue-800">Pregled domova</span>
+                </Link>
+                {role === UserRole.ROLE_APPLICANT && (
+                    <Link to="/rezervacije">
+                        <span className="text-lg text-blue-800">Moje rezervacije</span>
+                    </Link>
+                )}
             </div>
+
             <nav className="flex space-x-4 items-center">
                 {jwtResponse?.accessToken ? (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Avatar className="cursor-pointer">
                                 <AvatarImage src="" alt="User avatar" />
-
                                 <AvatarFallback>{initials}</AvatarFallback>
                             </Avatar>
                         </DropdownMenuTrigger>

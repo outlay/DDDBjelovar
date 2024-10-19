@@ -5,12 +5,10 @@ export enum UserRole {
     ROLE_MAYOR = "ROLE_MAYOR",
 }
 
-type UserResponse = {
+export type UserResponse = {
     id: number;
     firstName: string;
     lastName: string;
     email: string;
     role: UserRole;
 };
-
-export type { UserResponse };

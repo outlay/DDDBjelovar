@@ -1,10 +1,4 @@
-import {
-    Navigate,
-    Outlet,
-    Route,
-    createBrowserRouter,
-    createRoutesFromElements,
-} from "react-router-dom";
+import { Navigate, Route, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
 import Layout from "../components/layout/Layout";
 import ErrorComponent from "../components/ErrorComponent";
 import Home from "../views/Home";
@@ -13,7 +7,13 @@ import CommunityHouseDisplay from "../views/CommunityHouseDisplay";
 import { useApp } from "./app-context";
 import { UserRole } from "@/models/user";
 
-const ProtectedRoute = ({ allowedRoles }: { allowedRoles: UserRole[] }) => {
+const ProtectedRoute = ({
+    allowedRoles,
+    children,
+}: {
+    allowedRoles: UserRole[];
+    children: React.ReactNode;
+}) => {
     const { jwtResponse } = useApp();
 
     if (!jwtResponse?.accessToken || !jwtResponse.user) {
@@ -24,7 +24,7 @@ const ProtectedRoute = ({ allowedRoles }: { allowedRoles: UserRole[] }) => {
         return <Navigate to="/unauthorized" replace />;
     }
 
-    return <Outlet />;
+    return <>{children}</>;
 };
 
 const publicRoutes = (
@@ -42,15 +42,13 @@ const publicRoutes = (
 const userRoutes = (
     <Route
         element={
-            <ProtectedRoute
-                allowedRoles={[
-                    UserRole.ROLE_APPLICANT,
-                    UserRole.ROLE_CITY_SERVICE,
-                    UserRole.ROLE_JANITOR,
-                ]}
-            />
+            <ProtectedRoute allowedRoles={[UserRole.ROLE_APPLICANT]}>
+                <Layout></Layout>
+            </ProtectedRoute>
         }
-    ></Route>
+    >
+        <Route path="/rezervacije" element={<div>Moje rezervacije</div>} />
+    </Route>
 );
 
 const router = createBrowserRouter(
