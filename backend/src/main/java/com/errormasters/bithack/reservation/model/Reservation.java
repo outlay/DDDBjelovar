@@ -1,5 +1,6 @@
 package com.errormasters.bithack.reservation.model;
 
+import com.errormasters.bithack.house.model.CommunityHouse;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,8 +16,9 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "COMMUNITY_HOUSE_ID", nullable = false)
-    private Long communityHouseId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COMMUNITY_HOUSE_ID", nullable = false)
+    private CommunityHouse communityHouse;
 
     @Column(name = "PURPOSE_ID", nullable = false)
     private Long purposeId;
