@@ -33,7 +33,10 @@ const AuthDialog = ({ isOpen, onClose }: LoginDialogProps) => {
                 {isRegistering ? (
                     <Register onLoginClick={() => setIsRegistering(false)} />
                 ) : (
-                    <Login onRegisterClick={() => setIsRegistering(true)} />
+                    <Login
+                        handleClose={handleClose}
+                        onRegisterClick={() => setIsRegistering(true)}
+                    />
                 )}
             </DialogContent>
         </Dialog>

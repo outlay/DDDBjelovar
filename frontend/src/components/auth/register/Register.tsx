@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import axios from "axios";
+
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import axios from "axios";
 
 const formSchema = z
     .object({
@@ -48,10 +49,22 @@ const Register = ({ onLoginClick }: RegisterProps) => {
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
-            await axios.post(`${import.meta.env.VITE_API_URL}/users/`, {
-                email: values.email,
-                password: values.password,
-            });
+            await axios.post(
+                `${import.meta.env.VITE_API_URL}/users/`,
+                {
+                    firstName: "John",
+                    lastName: "Doe",
+                    email: values.email,
+                    password: values.password,
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                    },
+                    withCredentials: false,
+                }
+            );
             setError(null);
             onLoginClick();
         } catch {

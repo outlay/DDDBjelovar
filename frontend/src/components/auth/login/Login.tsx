@@ -14,19 +14,22 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useApp } from "@/routes/app-context";
+import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
     email: z.string().email({ message: "Nevažeća email adresa" }),
-    password: z.string().min(6, { message: "Lozinka mora imati najmanje 6 znakova" }),
+    password: z.string().min(4, { message: "Lozinka mora imati najmanje 4 znakova" }),
 });
 
 interface LoginProps {
     onRegisterClick: () => void;
+    handleClose: () => void;
 }
 
-const Login = ({ onRegisterClick }: LoginProps) => {
+const Login = ({ onRegisterClick, handleClose }: LoginProps) => {
     const { setJwtResponse } = useApp();
     const [error, setError] = useState<string | null>(null);
+    const { toast } = useToast();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -38,12 +41,18 @@ const Login = ({ onRegisterClick }: LoginProps) => {
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
+            const response1 = await axios.get(`${import.meta.env.VITE_API_URL}/community-houses`);
+            console.log(response1);
             const response = await axios.post(
                 `${import.meta.env.VITE_API_URL}/users/login`,
                 values
             );
             setJwtResponse(response.data);
             setError(null);
+            if (response.status === 200) {
+                toast({ duration: 1000, title: "Uspješna prijava", description: "Dobrodošli!" });
+                handleClose();
+            }
         } catch {
             setError("Neuspješna prijava. Provjerite svoje podatke.");
         }
