@@ -31,6 +31,10 @@ public class CommunityHouseController implements CommunityHouseApi {
     @Override
     public ResponseEntity<CommunityHouseDetailsResponse> fetchCommunityHouseByDates(
             Long id, LocalDate startDate, LocalDate endDate) {
-        return null;
+        log.info("Fetching community house by dates");
+
+        return ResponseEntity.ok(
+                communityHouseService.fetchCommunityHouseByDates(id, startDate, endDate)
+        );
     }
 }

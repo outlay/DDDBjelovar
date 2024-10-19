@@ -56,7 +56,7 @@ public interface CommunityHouseApi {
             @RequestParam("startDate") @Future(message = "Početni datum mora biti u budućnosti barem 8 dana")
             LocalDate startDate,
             @Schema(description = "End date of the reservation", required = true)
-            @PathVariable("endDate") @Future(message = "Datum kraja mora biti u budućnosti")
+            @RequestParam("endDate") @Future(message = "Datum kraja mora biti u budućnosti")
             LocalDate endDate
     );
 }

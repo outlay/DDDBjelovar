@@ -1,8 +1,10 @@
 package com.errormasters.bithack.house.model;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@Getter
 public enum DayOfWeek {
     PON(0, "PONEDJELJAK"),
     UTO(1, "UTORAK"),
