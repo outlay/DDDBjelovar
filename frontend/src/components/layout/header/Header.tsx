@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import Logo from "@/assets/logo.svg";
 import LoginDialog from "@/components/auth/login/Login"; // Pretpostavljamo da imate ovu komponentu

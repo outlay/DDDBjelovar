@@ -16,6 +16,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
+import { useNavigate } from "react-router-dom";
 
 interface CommunityHouse {
     id: number;
@@ -31,6 +32,12 @@ interface CommunityHouseCardProps {
 }
 
 const CommunityHouseCard: React.FC<CommunityHouseCardProps> = ({ house }) => {
+    const navigate = useNavigate();
+
+    const handleCheckReservation = () => {
+        navigate(`/dom/${house.id}`);
+    };
+
     return (
         <Card className="w-[300px] rounded-lg overflow-hidden">
             <img src={house.image} alt={house.name} className="w-full h-40 object-cover" />
@@ -71,7 +78,7 @@ const CommunityHouseCard: React.FC<CommunityHouseCardProps> = ({ house }) => {
                                 </Badge>
                             ))}
                         </div>
-                        <Button className="mt-4" variant="default">
+                        <Button className="mt-4" variant="default" onClick={handleCheckReservation}>
                             Provjera rezervacije
                         </Button>
                     </DialogContent>
