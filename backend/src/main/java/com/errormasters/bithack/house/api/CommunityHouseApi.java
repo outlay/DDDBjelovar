@@ -1,5 +1,6 @@
 package com.errormasters.bithack.house.api;
 
+import com.errormasters.bithack.config.error.ApplicationError;
 import com.errormasters.bithack.house.dto.CommunityHouseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -25,9 +26,9 @@ public interface CommunityHouseApi {
     @GetMapping
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = CommunityHouseResponse.class)))),@ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json"))
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationError.class))),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationError.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationError.class)))
     })
     @Operation(summary = "Fetches all community houses")
     ResponseEntity<List<CommunityHouseResponse>> fetchCommunityHouses();
