@@ -1,8 +1,5 @@
-import React, { useState } from "react";
-import {
-    CommunityHouse,
-    CommunityHouseCard,
-} from "@/components/community-houses/CommunityHouseCard";
+import React, { useEffect, useState } from "react";
+import { CommunityHouseCard } from "@/components/community-houses/CommunityHouseCard";
 import {
     Select,
     SelectContent,
@@ -12,60 +9,37 @@ import {
 } from "@/components/ui/select";
 import DateRangeSelector from "@/components/DateRangeSelector";
 import { DateRange } from "react-day-picker";
-
-// Pretpostavimo da imamo neke podatke o društvenim domovima
-const communityHouses: CommunityHouse[] = [
-    {
-        id: 1,
-        name: "Dom Kulture",
-        image: "https://picsum.photos/id/641/800/800",
-        description: "Prostrani dom kulture u centru grada",
-        capacity: 200,
-        amenities: ["Pozornica", "Audio oprema", "Kuhinja"],
-    },
-    {
-        id: 2,
-        name: "Sportska Dvorana",
-        image: "https://picsum.photos/id/213/800/800",
-        description: "Moderna sportska dvorana s više terena",
-        capacity: 500,
-        amenities: ["Košarkaški teren", "Odbojkaški teren", "Svlačionice"],
-    },
-    {
-        id: 3,
-        name: "Dom Kulture",
-        image: "https://picsum.photos/id/642/800/800",
-        description: "Prostrani dom kulture u centru grada",
-        capacity: 200,
-        amenities: ["Pozornica", "Audio oprema", "Kuhinja"],
-    },
-    {
-        id: 4,
-        name: "Sportska Dvorana",
-        image: "https://picsum.photos/id/211/800/800",
-        description: "Moderna sportska dvorana s više terena",
-        capacity: 500,
-        amenities: ["Košarkaški teren", "Odbojkaški teren", "Svlačionice"],
-    },
-];
+import { CommunityHouseResponse } from "@/models/generated";
+import { apiClient } from "@/lib/api-client";
 
 const CommunityHouses: React.FC = () => {
-    const [selectedCapacity, setSelectedCapacity] = useState<string | null>(null);
+    const [selectedCapacity, setSelectedCapacity] = useState<number | null>(null);
+    const [communityHouses, setCommunityHouses] = useState<CommunityHouseResponse[]>([]);
     const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
 
-    const filteredHouses = communityHouses.filter(house => {
-        if (selectedCapacity && house.capacity.toString() !== selectedCapacity) {
+    const filteredHouses = communityHouses?.filter(house => {
+        if (selectedCapacity && house.approxNumberOfOccupants !== selectedCapacity) {
             return false;
         }
-        // TODO: Implement date availability filtering
+
         return true;
     });
+
+    useEffect(() => {
+        apiClient.get<CommunityHouseResponse[]>("/community-houses").then(response => {
+            setCommunityHouses(response as unknown as CommunityHouseResponse[]);
+        });
+    }, []);
+
+    if (!communityHouses?.length) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="p-4 flex">
             <div className="flex-grow px-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    {filteredHouses.map(house => (
+                    {communityHouses.map(house => (
                         <CommunityHouseCard key={house.id} house={house} />
                     ))}
                 </div>
@@ -76,11 +50,7 @@ const CommunityHouses: React.FC = () => {
                     <div className="space-y-4">
                         <div>
                             <h3 className="text-sm font-medium mb-2">Kapacitet</h3>
-                            <Select
-                                onValueChange={value =>
-                                    setSelectedCapacity(value === "all" ? null : value)
-                                }
-                            >
+                            <Select>
                                 <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Odaberi kapacitet" />
                                 </SelectTrigger>
