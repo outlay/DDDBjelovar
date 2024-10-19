@@ -1,15 +1,8 @@
+import { UserResponse } from "@/models/user";
 import axios from "axios";
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 
-interface UserResponse {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-    role: string;
-}
-
-interface JwtResponse {
+export interface JwtResponse {
     accessToken: string;
     accessTokenExpires: number;
     type: string;

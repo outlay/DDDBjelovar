@@ -11,13 +11,7 @@ import Home from "../views/Home";
 import CommunityHouses from "../views/CommunityHouses";
 import CommunityHouseDisplay from "../views/CommunityHouseDisplay";
 import { useApp } from "./app-context";
-
-export enum UserRole {
-    ROLE_APPLICANT = "ROLE_APPLICANT",
-    ROLE_CITY_SERVICE = "ROLE_CITY_SERVICE",
-    ROLE_JANITOR = "ROLE_JANITOR",
-    ROLE_MAYOR = "ROLE_MAYOR",
-}
+import { UserRole } from "@/models/user";
 
 const ProtectedRoute = ({ allowedRoles }: { allowedRoles: UserRole[] }) => {
     const { jwtResponse } = useApp();

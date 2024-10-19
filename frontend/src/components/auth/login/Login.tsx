@@ -41,8 +41,6 @@ const Login = ({ onRegisterClick, handleClose }: LoginProps) => {
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
-            const response1 = await axios.get(`${import.meta.env.VITE_API_URL}/community-houses`);
-            console.log(response1);
             const response = await axios.post(
                 `${import.meta.env.VITE_API_URL}/users/login`,
                 values
