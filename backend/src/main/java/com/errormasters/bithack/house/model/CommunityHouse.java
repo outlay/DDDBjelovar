@@ -12,21 +12,22 @@ import java.util.List;
 @Data
 public class CommunityHouse extends AuditableEntity {
     @Id
-    @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CATEGORY_ID", nullable = false)
+    private Category category;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COORDINATES_ID")
+    private Coordinates coordinates;
 
     @Column(name = "NAME", nullable = false)
     private String name;
 
     @Column(name = "ADDRESS", nullable = false)
     private String address;
-
-    @Column(name = "RENT_AMOUNT", nullable = false, precision = 10, scale = 2)
-    private BigDecimal rentAmount;
-
-    @Column(name = "GUARANTEE_AMOUNT", nullable = false, precision = 10, scale = 2)
-    private BigDecimal guaranteeAmount;
 
     @Column(name = "SQUARING", nullable = false, precision = 10, scale = 2)
     private BigDecimal squaring;
@@ -35,7 +36,7 @@ public class CommunityHouse extends AuditableEntity {
     private BigDecimal cutleryRentAmountPerPerson;
 
     @Column(name = "APROX_NUMBER_OF_OCCUPANTS", precision = 10, scale = 2)
-    private BigDecimal aproxNumberOfOccupants;
+    private BigDecimal approxNumberOfOccupants;
 
     @Column(name = "NOTE")
     private String note;
@@ -44,7 +45,10 @@ public class CommunityHouse extends AuditableEntity {
     private boolean active = true;
 
     @OneToMany(mappedBy = "communityHouse", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<WorkingHours> workingHours;
+    private List<NonWorkingDay> nonWorkingDays;
+
+    @OneToMany(mappedBy = "communityHouse", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Image> images;
 }
 
 
