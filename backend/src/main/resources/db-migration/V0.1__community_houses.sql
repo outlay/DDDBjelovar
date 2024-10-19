@@ -131,8 +131,8 @@ INSERT INTO NON_WORKING_DAYS (COMMUNITY_HOUSE_ID, DAY_OF_WEEK, CREATED_BY, UPDAT
 VALUES
     (1, 1, 'system', 'system'),
     (1, 3, 'system', 'system'),
-    (8, 5, 'system', 'system'),
-    (13, 5, 'system', 'system'),
-    (16, 6, 'system', 'system'),
-    (16, 0, 'system', 'system');
+    (2, 5, 'system', 'system'),
+    (2, 5, 'system', 'system'),
+    (3, 6, 'system', 'system'),
+    (3, 0, 'system', 'system');
 
