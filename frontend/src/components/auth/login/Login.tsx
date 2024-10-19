@@ -1,131 +1,96 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/Button";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import axios from "axios";
+import { Button } from "@/components/ui/button";
 import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogFooter,
-    DialogTitle,
-} from "@/components/ui/Dialog";
-import { Input } from "@/components/ui/Input";
-import { Label } from "@/components/ui/Label";
-import { Checkbox } from "@/components/ui/Checkbox";
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useApp } from "@/routes/app-context";
 
-interface LoginDialogProps {
-    isOpen: boolean;
-    onClose: () => void;
+const formSchema = z.object({
+    email: z.string().email({ message: "Nevažeća email adresa" }),
+    password: z.string().min(6, { message: "Lozinka mora imati najmanje 6 znakova" }),
+});
+
+interface LoginProps {
+    onRegisterClick: () => void;
 }
 
-const LoginDialog = ({ isOpen, onClose }: LoginDialogProps) => {
-    const [isRegistering, setIsRegistering] = useState(false);
+const Login = ({ onRegisterClick }: LoginProps) => {
+    const { setJwtResponse } = useApp();
+    const [error, setError] = useState<string | null>(null);
+
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            email: "",
+            password: "",
+        },
+    });
+
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        try {
+            const response = await axios.post(
+                `${import.meta.env.VITE_API_URL}/users/login`,
+                values
+            );
+            setJwtResponse(response.data);
+            setError(null);
+        } catch {
+            setError("Neuspješna prijava. Provjerite svoje podatke.");
+        }
+    };
 
     return (
-        <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                    <DialogTitle className="text-2xl font-bold">
-                        {isRegistering ? "Registracija" : "Prijava"}
-                    </DialogTitle>
-                </DialogHeader>
-                {isRegistering ? (
-                    <div className="grid gap-4 py-4">
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="email" className="text-right">
-                                Email
-                            </Label>
-                            <Input
-                                id="email"
-                                type="email"
-                                className="col-span-3"
-                                placeholder="Unesite email"
-                            />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="password" className="text-right">
-                                Lozinka
-                            </Label>
-                            <Input
-                                id="password"
-                                type="password"
-                                className="col-span-3"
-                                placeholder="Unesite lozinku"
-                            />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="confirmPassword" className="text-right">
-                                Potvrdite lozinku
-                            </Label>
-                            <Input
-                                id="confirmPassword"
-                                type="password"
-                                className="col-span-3"
-                                placeholder="Potvrdite lozinku"
-                            />
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <Checkbox id="terms" />
-                            <Label htmlFor="terms">Prihvaćam uvjete poslovanja</Label>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="grid gap-4 py-4">
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="email" className="text-right">
-                                Email
-                            </Label>
-                            <Input
-                                id="email"
-                                type="email"
-                                className="col-span-3"
-                                placeholder="Unesite email"
-                            />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="password" className="text-right">
-                                Lozinka
-                            </Label>
-                            <Input
-                                id="password"
-                                type="password"
-                                className="col-span-3"
-                                placeholder="Unesite lozinku"
-                            />
-                        </div>
-                    </div>
-                )}
-                <DialogFooter>
-                    <Button type="submit" className="ml-2">
-                        {isRegistering ? "Registriraj se" : "Prijavi se"}
-                    </Button>
-                </DialogFooter>
-                <div className="mt-4 text-center">
-                    <p>
-                        {isRegistering ? (
-                            <>
-                                Već imate korisnički račun?{" "}
-                                <span
-                                    className="text-blue-500 cursor-pointer"
-                                    onClick={() => setIsRegistering(false)}
-                                >
-                                    Prijavite se!
-                                </span>
-                            </>
-                        ) : (
-                            <>
-                                Nemate korisnički račun?{" "}
-                                <span
-                                    className="text-blue-500 cursor-pointer"
-                                    onClick={() => setIsRegistering(true)}
-                                >
-                                    Registriraj se!
-                                </span>
-                            </>
-                        )}
-                    </p>
-                </div>
-            </DialogContent>
-        </Dialog>
+        <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Unesite email" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Lozinka</FormLabel>
+                            <FormControl>
+                                <Input type="password" placeholder="Unesite lozinku" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                {error && <p className="text-red-500">{error}</p>}
+                <Button type="submit">Prijavi se</Button>
+            </form>
+            <div className="mt-4 text-center">
+                <p>
+                    Nemate korisnički račun?{" "}
+                    <span className="text-blue-500 cursor-pointer" onClick={onRegisterClick}>
+                        Registriraj se!
+                    </span>
+                </p>
+            </div>
+        </Form>
     );
 };
 
-export default LoginDialog;
+export default Login;
