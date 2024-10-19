@@ -2,6 +2,8 @@ import { Route, createBrowserRouter, createRoutesFromElements } from "react-rout
 import Layout from "./components/layout/Layout";
 import ErrorComponent from "./components/ErrorComponent";
 import Home from "./views/Home";
+import CommunityHouses from "./views/CommunityHouses";
+import CommunityHouseDisplay from "./views/CommunityHouseDisplay";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -11,6 +13,8 @@ const router = createBrowserRouter(
             errorElement={<ErrorComponent message="This content does not exist!" />}
         >
             <Route index element={<Home />} />
+            <Route path="/domovi" element={<CommunityHouses />} />
+            <Route path="/dom/:id" element={<CommunityHouseDisplay />} />
         </Route>
     )
 );
