@@ -1,5 +1,5 @@
 import { CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
+import { format, addDays } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -12,6 +12,9 @@ interface DateRangeSelectorProps {
 }
 
 export default function DateRangeSelector({ dateRange, setDateRange }: DateRangeSelectorProps) {
+    const today = new Date();
+    const fromDate = addDays(today, 8);
+
     return (
         <Popover>
             <PopoverTrigger asChild>
@@ -34,7 +37,13 @@ export default function DateRangeSelector({ dateRange, setDateRange }: DateRange
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">
-                <Calendar mode="range" selected={dateRange} onSelect={setDateRange} initialFocus />
+                <Calendar
+                    mode="range"
+                    selected={dateRange}
+                    onSelect={setDateRange}
+                    initialFocus
+                    fromDate={fromDate}
+                />
             </PopoverContent>
         </Popover>
     );
