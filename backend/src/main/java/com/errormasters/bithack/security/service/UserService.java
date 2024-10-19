@@ -42,28 +42,37 @@ public class UserService {
     @EventListener(ApplicationReadyEvent.class)
     protected void addDefaultUsers() {
         Optional<User> userApplicant = userRepository.findByEmail("test@applicant.com");
+
         if (userApplicant.isPresent()) {
             User user = userApplicant.get();
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userRepository.save(user);
+            if (user.getPassword().equals("test")) {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                userRepository.save(user);
+            }
         }
         Optional<User> userCityService = userRepository.findByEmail("test@city.com");
         if (userCityService.isPresent()) {
             User user = userCityService.get();
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userRepository.save(user);
+            if (user.getPassword().equals("test")) {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                userRepository.save(user);
+            }
         }
         Optional<User> userJanitor= userRepository.findByEmail("test@janitor.com");
         if (userJanitor.isPresent()) {
             User user = userJanitor.get();
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userRepository.save(user);
+            if (user.getPassword().equals("test")) {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                userRepository.save(user);
+            }
         }
         Optional<User> userMayor = userRepository.findByEmail("test@mayor.com");
         if (userMayor.isPresent()) {
             User user = userMayor.get();
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userRepository.save(user);
+            if (user.getPassword().equals("test")) {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                userRepository.save(user);
+            }
         }
 
         log.info("Added all default users in the database");

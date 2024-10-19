@@ -6,6 +6,7 @@ import com.errormasters.bithack.reservation.repository.ReservationRepository;
 import com.errormasters.bithack.security.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,5 +21,4 @@ public class ReservationService {
             throw new ReservationAccessDeniedException("Nije dozvoljeno gledati tuđe rezervacije!");
         }
     }
-
 }
