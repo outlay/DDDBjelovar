@@ -96,7 +96,7 @@ public class UserService {
         DashboardUserDetails userDetails = (DashboardUserDetails) authentication.getPrincipal();
 
         String role = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
-                .toList().getFirst();
+                .findFirst().orElse(null);
 
         log.info("User login information: [Id: {}, Role: {}]", userDetails.getId(), role);
 
