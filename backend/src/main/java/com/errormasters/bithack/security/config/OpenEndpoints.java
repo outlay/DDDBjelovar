@@ -12,7 +12,8 @@ public enum OpenEndpoints {
             "/v3/api-docs/**",
             "/swagger-resources/**",
             "/webjars/**",
-            "/actuator/**"
+            "/actuator/**",
+            V1 + HOUSES + "/*"
     ),
 
     POST (

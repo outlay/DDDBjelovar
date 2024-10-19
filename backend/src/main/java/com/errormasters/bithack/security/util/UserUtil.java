@@ -15,4 +15,14 @@ public class UserUtil {
         }
         return null;
     }
+
+    public static Long getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            if (authentication.getPrincipal() instanceof DashboardUserDetails userDetails) {
+                return userDetails.getId();
+            }
+        }
+        return null;
+    }
 }

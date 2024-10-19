@@ -15,9 +15,23 @@ CREATE TABLE USERS (
     FOREIGN KEY (ROLE_NAME) REFERENCES ROLE(NAME)
 );
 
+-- Inserting data
+
 INSERT INTO ROLE (NAME)
 VALUES
     ('ROLE_APPLICANT'),
     ('ROLE_CITY_SERVICE'),
     ('ROLE_JANITOR'),
     ('ROLE_MAYOR');
+
+INSERT INTO USERS (FIRST_NAME, LAST_NAME, PASSWORD, ROLE_NAME, EMAIL)
+VALUES ('ApplicantFirstName', 'ApplicantLastName', 'test', 'ROLE_APPLICANT', 'test@applicant.com');
+
+INSERT INTO USERS (FIRST_NAME, LAST_NAME, PASSWORD, ROLE_NAME, EMAIL)
+VALUES ('CityFirstName', 'CityLastName', 'test', 'ROLE_CITY_SERVICE', 'test@city.com');
+
+INSERT INTO USERS (FIRST_NAME, LAST_NAME, PASSWORD, ROLE_NAME, EMAIL)
+VALUES ('JanitorFirstName', 'JanitorLastName', 'test', 'ROLE_JANITOR', 'test@janitor.com');
+
+INSERT INTO USERS (FIRST_NAME, LAST_NAME, PASSWORD, ROLE_NAME, EMAIL)
+VALUES ('MayorFirstName', 'MayorLastName', 'test', 'ROLE_MAYOR', 'test@mayor.com');
