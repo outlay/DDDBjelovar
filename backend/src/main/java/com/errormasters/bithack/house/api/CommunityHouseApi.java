@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +40,27 @@ public interface CommunityHouseApi {
     @Operation(summary = "Fetches all community houses")
     ResponseEntity<List<CommunityHouseResponse>> fetchCommunityHouses();
 
-    @GetMapping("/{id}")
+    @GetMapping("/search")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = CommunityHouseResponse.class)))),
+            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ApplicationError.class)))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationError.class))),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationError.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationError.class)))
+    })
+    @Operation(summary = "Fetches all community houses filtered by capacity, start and end date")
+    ResponseEntity<List<CommunityHouseResponse>> fetchCommunityHouses(
+            @Schema(description = "Start date of the reservation", required = true)
+            @RequestParam("startDate") @PastOrPresent(message = "Početni datum mora biti u prošlosti")
+            LocalDate startDate,
+            @Schema(description = "End date of the reservation", required = true)
+            @RequestParam("endDate") @Future(message = "Datum kraja mora biti u budućnosti")
+            LocalDate endDate,
+            @Schema(description = "Capacity of the community house")
+            @RequestParam(value = "capacity", required = false) @PositiveOrZero Integer capacity
+    );
+
+    @GetMapping("/{id}/availability")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CommunityHouseResponse.class))),
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ApplicationError.class)))),
@@ -58,5 +79,19 @@ public interface CommunityHouseApi {
             @Schema(description = "End date of the reservation", required = true)
             @RequestParam("endDate") @Future(message = "Datum kraja mora biti u budućnosti")
             LocalDate endDate
+    );
+
+    @GetMapping("/{id}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CommunityHouseResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationError.class))),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ApplicationError.class)))),
+            @ApiResponse(responseCode = "404", description = "Not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationError.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationError.class)))
+    })
+    @Operation(summary = "Fetches the community house by ID")
+    ResponseEntity<CommunityHouseDetailsResponse> fetchCommunityHouseByDates(
+            @Schema(description = "ID of the community house to fetch", required = true)
+            @PathVariable("id") Long id
     );
 }

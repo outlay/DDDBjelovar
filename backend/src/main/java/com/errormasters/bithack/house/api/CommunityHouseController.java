@@ -29,12 +29,31 @@ public class CommunityHouseController implements CommunityHouseApi {
     }
 
     @Override
+    public ResponseEntity<List<CommunityHouseResponse>> fetchCommunityHouses(
+            LocalDate startDate, LocalDate endDate, Integer capacity) {
+        log.info("Fetching community houses by capacity, start and end date");
+
+        var communityHouses = communityHouseService.fetchCommunityHouses(startDate, endDate, capacity);
+
+        return ResponseEntity.ok(communityHouseMapper.mapToResponse(communityHouses));
+    }
+
+    @Override
     public ResponseEntity<CommunityHouseDetailsResponse> fetchCommunityHouseByDates(
             Long id, LocalDate startDate, LocalDate endDate) {
         log.info("Fetching community house by dates");
 
         return ResponseEntity.ok(
                 communityHouseService.fetchCommunityHouseByDates(id, startDate, endDate)
+        );
+    }
+
+    @Override
+    public ResponseEntity<CommunityHouseDetailsResponse> fetchCommunityHouseByDates(Long id) {
+        log.info("Fetching community house by ID");
+
+        return ResponseEntity.ok(
+                communityHouseService.fetchCommunityHouseById(id)
         );
     }
 }

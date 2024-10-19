@@ -1,6 +1,7 @@
 package com.errormasters.bithack.house.model;
 
 import com.errormasters.bithack.common.model.AuditableEntity;
+import com.errormasters.bithack.reservation.model.Reservation;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -49,6 +50,9 @@ public class CommunityHouse extends AuditableEntity {
 
     @OneToMany(mappedBy = "communityHouse", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Image> images;
+
+    @OneToMany(mappedBy = "communityHouse", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Reservation> reservations;
 }
 
 

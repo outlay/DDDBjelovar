@@ -15,8 +15,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+
+import static java.util.Objects.isNull;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +30,12 @@ public class CommunityHouseService {
 
     public List<CommunityHouse> fetchCommunityHouses() {
         return communityHouseRepository.findAll();
+    }
+
+    public List<CommunityHouse> fetchCommunityHouses(
+            @NotNull LocalDate startDate, @NotNull LocalDate endDate, Integer capacity) {
+        return communityHouseRepository.findAllByCapacityAndAvailable(
+                startDate.atStartOfDay(), endDate.atStartOfDay(), capacity, ReservationStatusEnum.ZAHTJEV_OTKAZAN);
     }
 
     @Transactional
@@ -47,6 +56,14 @@ public class CommunityHouseService {
             throw new OverlappingReservationException("Rezervacija već postoji za ovaj period!");
         }
 
+        var communityHouse = communityHouseRepository
+                .findById(id)
+                .orElseThrow(() -> new CommunityHouseNotFoundException("Društveni dom nije nađen!"));
+        return communityHouseMapper.mapToDetailsResponse(communityHouse);
+    }
+
+    @Transactional
+    public CommunityHouseDetailsResponse fetchCommunityHouseById(@NotNull Long id) {
         var communityHouse = communityHouseRepository
                 .findById(id)
                 .orElseThrow(() -> new CommunityHouseNotFoundException("Društveni dom nije nađen!"));
