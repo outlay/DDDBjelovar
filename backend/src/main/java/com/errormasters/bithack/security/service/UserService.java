@@ -8,18 +8,19 @@ import com.errormasters.bithack.security.entity.dto.response.UserResponse;
 import com.errormasters.bithack.security.entity.pojo.DashboardUserDetails;
 import com.errormasters.bithack.security.entity.pojo.JwtGenerationResult;
 import com.errormasters.bithack.security.entity.pojo.RoleEnum;
+import com.errormasters.bithack.security.exception.SavingUserFailedException;
 import com.errormasters.bithack.security.repository.UserRepository;
 import com.errormasters.bithack.security.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -120,7 +121,7 @@ public class UserService {
         if (savedUser.isPresent()) {
             return savedUser.get().getId();
         } else {
-            throw new UsernameNotFoundException("Spremanje korisnika sa email-om " + signupRequest.getEmail() + " nije bilo uspješno!");
+            throw new SavingUserFailedException(HttpStatus.INTERNAL_SERVER_ERROR, "Spremanje korisnika sa email-om " + signupRequest.getEmail() + " nije bilo uspješno!");
         }
     }
 

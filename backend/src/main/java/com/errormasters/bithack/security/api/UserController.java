@@ -4,6 +4,7 @@ import com.errormasters.bithack.security.entity.dto.request.LoginRequest;
 import com.errormasters.bithack.security.entity.dto.request.SignupRequest;
 import com.errormasters.bithack.security.entity.dto.response.JwtResponse;
 import com.errormasters.bithack.security.entity.dto.response.SignupResponse;
+import com.errormasters.bithack.security.exception.UserAlreadyExistsException;
 import com.errormasters.bithack.security.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ public class UserController implements UserApi {
 
         if (userService.userExistsByEmail(signupRequest.getEmail())) {
             log.info("Adding user failed cause this email already exists in the database");
-            return ResponseEntity.status(409).body(new SignupResponse(0L));
+            throw new UserAlreadyExistsException("Korisnik s unesenim e-mailom već postoji");
         } else {
             Long userId = userService.addUser(signupRequest);
             log.info("Added user with id {}", userId);
