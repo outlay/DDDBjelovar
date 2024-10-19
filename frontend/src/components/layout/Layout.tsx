@@ -5,11 +5,13 @@ import { Toaster } from "../ui/toaster";
 
 const Layout = () => {
     return (
-        <div>
-            <Header></Header>
-            <Outlet></Outlet>
-            <Toaster></Toaster>
-            <Footer></Footer>
+        <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-grow">
+                <Outlet />
+            </main>
+            <Toaster />
+            <Footer />
         </div>
     );
 };

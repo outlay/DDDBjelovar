@@ -6,6 +6,8 @@ import CommunityHouses from "../views/CommunityHouses";
 import CommunityHouseDisplay from "../views/CommunityHouseDisplay";
 import { useApp } from "./app-context";
 import { UserRole } from "@/models/user";
+import MyReservations from "@/views/applicant/MyReservations";
+import ReservationDetails from "@/views/applicant/ReservationDetails";
 
 const ProtectedRoute = ({
     allowedRoles,
@@ -47,7 +49,8 @@ const userRoutes = (
             </ProtectedRoute>
         }
     >
-        <Route path="/rezervacije" element={<div>Moje rezervacije</div>} />
+        <Route path="/rezervacije" element={<MyReservations />} />
+        <Route path="/rezervacije/:id" element={<ReservationDetails />} />
     </Route>
 );
 
