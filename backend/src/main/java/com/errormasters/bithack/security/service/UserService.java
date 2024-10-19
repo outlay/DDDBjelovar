@@ -24,7 +24,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -42,44 +41,32 @@ public class UserService {
 
     @EventListener(ApplicationReadyEvent.class)
     protected void addDefaultUsers() {
-        List<User> list = userRepository.findAll();
-        if (!list.isEmpty()) {
-            log.info("Users already present in database, cancelling default users creation");
-        } else {
-            SignupRequest signupRequestApp = new SignupRequest();
-            signupRequestApp.setFirstName("ApplicantFirstName");
-            signupRequestApp.setLastName("ApplicantLastName");
-            signupRequestApp.setPassword("test");
-            signupRequestApp.setEmail("test@applicant.com");
-
-            addUser(signupRequestApp);
-
-            SignupRequest signupRequestCity = new SignupRequest();
-            signupRequestCity.setFirstName("CityFirstName");
-            signupRequestCity.setLastName("CityLastName");
-            signupRequestCity.setPassword("test");
-            signupRequestCity.setEmail("test@city.com");
-
-            addUserInternal(signupRequestCity, RoleEnum.ROLE_CITY_SERVICE.name());
-
-            SignupRequest signupRequestJan = new SignupRequest();
-            signupRequestJan.setFirstName("JanitorFirstName");
-            signupRequestJan.setLastName("JanitorLastName");
-            signupRequestJan.setPassword("test");
-            signupRequestJan.setEmail("test@janitor.com");
-
-            addUserInternal(signupRequestJan, RoleEnum.ROLE_JANITOR.name());
-
-            SignupRequest signupRequestMayor = new SignupRequest();
-            signupRequestMayor.setFirstName("MayorFirstName");
-            signupRequestMayor.setLastName("MayorLastName");
-            signupRequestMayor.setPassword("test");
-            signupRequestMayor.setEmail("test@mayor.com");
-
-            addUserInternal(signupRequestMayor, RoleEnum.ROLE_MAYOR.name());
-
-            log.info("Added all default users");
+        Optional<User> userApplicant = userRepository.findByEmail("test@applicant.com");
+        if (userApplicant.isPresent()) {
+            User user = userApplicant.get();
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userRepository.save(user);
         }
+        Optional<User> userCityService = userRepository.findByEmail("test@city.com");
+        if (userCityService.isPresent()) {
+            User user = userCityService.get();
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userRepository.save(user);
+        }
+        Optional<User> userJanitor= userRepository.findByEmail("test@janitor.com");
+        if (userJanitor.isPresent()) {
+            User user = userJanitor.get();
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userRepository.save(user);
+        }
+        Optional<User> userMayor = userRepository.findByEmail("test@mayor.com");
+        if (userMayor.isPresent()) {
+            User user = userMayor.get();
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userRepository.save(user);
+        }
+
+        log.info("Added all default users in the database");
     }
 
     public JwtResponse authenticateUser(LoginRequest loginRequest) {

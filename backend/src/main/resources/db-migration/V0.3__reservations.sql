@@ -68,14 +68,14 @@ ALTER TABLE RESERVATION
 
 -- Inserting data
 
--- RESERVATION table
-INSERT INTO RESERVATION (COMMUNITY_HOUSE_ID, PURPOSE_ID, USER_ID, RESERVATION_AMOUNT_ID, RECORD_ID, BANK, IBAN, LOCAL_BOARD_NAME, ISSUE_DATE, DATE_TIME_FROM, DATE_TIME_TO, STATUS, CREATED_BY, UPDATED_BY)
+-- RECORD table
+INSERT INTO RECORD (STATE_BEFORE, STATE_AFTER, DAMAGE, PROBLEMS, DATE_OF_INSPECTION, STATUS, CREATED_BY, UPDATED_BY)
 VALUES
-    (1, 1, 1, 1, 1, 'Bank A', 'HR1234567890', 'Local Board 1', '2023-06-01', '2023-06-15 10:00:00', '2023-06-15 18:00:00', '01', 'system', 'system'),
-    (2, 2, 2, 2, 2, 'Bank B', 'HR9876543210', 'Local Board 2', '2023-07-01', '2023-07-10 12:00:00', '2023-07-10 20:00:00', '02', 'system', 'system'),
-    (3, 3, 3, 3, 3, 'Bank C', 'HR5678901234', 'Local Board 3', '2023-08-01', '2023-08-20 09:00:00', '2023-08-20 17:00:00', '03', 'system', 'system'),
-    (4, 4, 4, 4, 4, 'Bank D', 'HR4321098765', 'Local Board 4', '2023-09-01', '2023-09-05 14:00:00', '2023-09-05 22:00:00', '04', 'system', 'system'),
-    (5, 1, 5, 5, 5, 'Bank E', 'HR7890123456', 'Local Board 5', '2023-10-01', '2023-10-12 11:00:00', '2023-10-12 19:00:00', '05', 'system', 'system');
+    ('Good', 'Good', NULL, NULL, '2023-06-16', '01', 'system', 'system'),
+    ('Good', 'Satisfactory', 'Minor scratches', NULL, '2023-07-11', '02', 'system', 'system'),
+    ('Satisfactory', 'Good', NULL, 'Broken chair', '2023-08-21', '02', 'system', 'system'),
+    ('Good', 'Good', NULL, NULL, '2023-09-06', '02', 'system', 'system'),
+    ('Good', 'Good', NULL, 'Malfunctioning AC', '2023-10-13', '02', 'system', 'system');
 
 -- RESERVATION_AMOUNT table
 INSERT INTO RESERVATION_AMOUNT (RENT, GUARANTEE, PAYOFF, PDV, CREATED_BY, UPDATED_BY)
@@ -86,11 +86,11 @@ VALUES
     (120.00, 60.00, 180.00, 30.00, 'system', 'system'),
     (180.00, 90.00, 270.00, 45.00, 'system', 'system');
 
--- RECORD table
-INSERT INTO RECORD (STATE_BEFORE, STATE_AFTER, DAMAGE, PROBLEMS, DATE_OF_INSPECTION, STATUS, CREATED_BY, UPDATED_BY)
+-- RESERVATION table
+INSERT INTO RESERVATION (COMMUNITY_HOUSE_ID, PURPOSE_ID, USER_ID, RESERVATION_AMOUNT_ID, RECORD_ID, BANK, IBAN, LOCAL_BOARD_NAME, ISSUE_DATE, DATE_TIME_FROM, DATE_TIME_TO, STATUS, CREATED_BY, UPDATED_BY)
 VALUES
-    ('Good', 'Good', NULL, NULL, '2023-06-16', '01', 'system', 'system'),
-    ('Good', 'Satisfactory', 'Minor scratches', NULL, '2023-07-11', '02', 'system', 'system'),
-    ('Satisfactory', 'Good', NULL, 'Broken chair', '2023-08-21', '02', 'system', 'system'),
-    ('Good', 'Good', NULL, NULL, '2023-09-06', '02', 'system', 'system'),
-    ('Good', 'Good', NULL, 'Malfunctioning AC', '2023-10-13', '02', 'system', 'system');
+    (1, 1, 1, 1, 1, 'Bank A', 'HR1234567890', 'Local Board 1', '2023-06-01', '2023-06-15 10:00:00', '2023-06-15 18:00:00', '01', 'system', 'system'),
+    (2, 2, 2, 2, 2, 'Bank B', 'HR9876543210', 'Local Board 2', '2023-07-01', '2023-07-10 12:00:00', '2023-07-10 20:00:00', '02', 'system', 'system'),
+    (3, 3, 3, 3, 3, 'Bank C', 'HR5678901234', 'Local Board 3', '2023-08-01', '2023-08-20 09:00:00', '2023-08-20 17:00:00', '03', 'system', 'system'),
+    (4, 4, 4, 4, 4, 'Bank D', 'HR4321098765', 'Local Board 4', '2023-09-01', '2023-09-05 14:00:00', '2023-09-05 22:00:00', '04', 'system', 'system');
+
