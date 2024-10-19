@@ -11,6 +11,10 @@ public class Constants {
 
         public static final String HOUSES = "/community-houses";
 
+        public static final String RESERVATIONS = "/reservations";
+
+        public static final String RESERVATIONS_BY_USER = "/reservations/user";
+
         public static final String USERS = "/users";
 
         public static final String LOGIN = "/login";

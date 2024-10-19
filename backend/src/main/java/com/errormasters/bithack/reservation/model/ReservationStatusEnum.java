@@ -10,7 +10,8 @@ public enum ReservationStatusEnum {
     UGOVOR_POTPISAN_GRADONACELNIK("04", "Ugovor potpisan od strane gradonačelnika!"),
     UGOVOR_POTPISAN_STRANKA("05", "Ugovor potpisan od strane stranke!"),
     UGOVOR_PLACEN("06", "Ugovor plaćen!"),
-    JAMCEVINA_VRACENA("07", "Jamčevina vraćena!");
+    JAMCEVINA_VRACENA("07", "Jamčevina vraćena!"),
+    ZAHTJEV_OTKAZAN("08", "Zahtjev otkazan!");
 
     private final String code;
     private final String description;

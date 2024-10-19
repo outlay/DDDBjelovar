@@ -104,6 +104,10 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
+    public Optional<User> findUserById(Long id) {
+        return userRepository.findById(id);
+    }
+
     public Long addUser(SignupRequest signupRequest) {
         User user = new User();
         user.setEmail(signupRequest.getEmail());
