@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -62,6 +63,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(), "Nađene su validacijske greške!",
                 ex.getClass().getName(), LocalDateTime.now(), errors);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public final ResponseEntity<ApplicationError> handleBadCredentialsException(BadCredentialsException e) {
+        log.error("Authentication error occurred", e);
+        var applicationError = new ApplicationError(
+                HttpStatus.UNAUTHORIZED.value(),
+                "Pogrešno korisničko ime ili lozinka",
+                e.getClass().getName(),
+                LocalDateTime.now(),
+                null);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(applicationError);
     }
 
     @SuppressWarnings("NullableProblems")
