@@ -1,6 +1,7 @@
 package com.errormasters.bithack.reservation.contract.api;
 
 import com.errormasters.bithack.house.dto.CommunityHouseResponse;
+import com.errormasters.bithack.reservation.contract.dto.ContractCreatedResponse;
 import com.errormasters.bithack.reservation.contract.service.ContractService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +17,9 @@ public class ContractController implements ContractApi {
     private final ContractService contractService;
 
     @Override
-    public ResponseEntity<List<CommunityHouseResponse>> createContract(Integer reservationId) {
+    public ResponseEntity<ContractCreatedResponse> createContract(Long reservationId) {
         log.info("Creating contract for reservation {}", reservationId);
-        contractService.createContract("Contract for reservation " + reservationId + " created");
-        return ResponseEntity.noContent().build(); // todo implement
+        contractService.createContract("Contract for reservation " + reservationId + " created", reservationId);
+        return ResponseEntity.ok(new ContractCreatedResponse("Ugovor za rezervaciju " + reservationId + " je uspješno kreiran")); // todo implement
     }
 }

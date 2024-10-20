@@ -2,6 +2,7 @@ package com.errormasters.bithack.reservation.contract.api;
 
 import com.errormasters.bithack.config.error.ApplicationError;
 import com.errormasters.bithack.house.dto.CommunityHouseResponse;
+import com.errormasters.bithack.reservation.contract.dto.ContractCreatedResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,8 +33,8 @@ public interface ContractApi {
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationError.class)))
     })
     @Operation(summary = "Issues a contract for the reservation")
-    ResponseEntity<List<CommunityHouseResponse>> createContract(
+    ResponseEntity<ContractCreatedResponse> createContract(
             @Schema(description = "Reservation ID", required = true)
-            @PathVariable Integer reservationId
+            @PathVariable Long reservationId
     );
 }
