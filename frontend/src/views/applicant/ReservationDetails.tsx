@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/table";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PenTool } from "lucide-react";
 
 const ContractsTable = () => {
     const contracts = [
@@ -90,7 +91,7 @@ const ReservationDetails = () => {
         id,
         name: `Rezervacije #${id}`,
         status: "U procesu",
-        communityHouse: "Dom Kulture",
+        communityHouse: "Dom I MO HRGOVLJANI",
     };
 
     const headerHeight = 80;
@@ -118,15 +119,20 @@ const ReservationDetails = () => {
                                     <SidebarMenuItem>
                                         <SidebarMenuButton>
                                             <span>Status</span>
-                                            <Badge
-                                                variant={
-                                                    reservation.status === "pending"
-                                                        ? "outline"
-                                                        : "default"
-                                                }
-                                            >
-                                                {reservation.status}
-                                            </Badge>
+                                            <div className="flex items-center space-x-2">
+                                                <Badge
+                                                    variant={
+                                                        reservation.status === "U procesu"
+                                                            ? "outline"
+                                                            : "default"
+                                                    }
+                                                >
+                                                    {reservation.status}
+                                                </Badge>
+                                                {reservation.status === "U procesu" && (
+                                                    <PenTool className="h-4 w-4 text-gray-500" />
+                                                )}
+                                            </div>
                                         </SidebarMenuButton>
                                     </SidebarMenuItem>
                                     <SidebarMenuItem>

@@ -15,17 +15,53 @@ import { useApp } from "@/routes/app-context";
 import { useNavigate } from "react-router-dom";
 import { Toast } from "@/components/ui/toast";
 import AuthDialog from "@/components/auth/AuthDialog";
+import { getAssetUrl } from "@/lib/utils";
 
-// Mock data za društveni dom (ostaje isto)
 const mockHouse = {
     id: 1,
-    name: "Dom Kulture",
-    image: "https://picsum.photos/id/641/800/600",
-    description: "Prostrani dom kulture u centru grada, idealan za razne događaje i okupljanja.",
-    capacity: 200,
-    amenities: ["Pozornica", "Audio oprema", "Kuhinja", "Wi-Fi", "Parking"],
-    address: "Trg bana Jelačića 1, 10000 Zagreb",
-    pricePerDay: 500,
+    name: "I MO HRGOVLJANI",
+    image: "/download-shared-object/aHR0cDovLzEyNy4wLjAuMTo5MDAwL2JpdGhhY2svZHJ1c3R2ZW5pZG9tMS5qcGVnP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9VE5LWjVFN1E3NzFBRk0wUjEwNjMlMkYyMDI0MTAyMCUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNDEwMjBUMDkwMDEzWiZYLUFtei1FeHBpcmVzPTQzMTk5JlgtQW16LVNlY3VyaXR5LVRva2VuPWV5SmhiR2NpT2lKSVV6VXhNaUlzSW5SNWNDSTZJa3BYVkNKOS5leUpoWTJObGMzTkxaWGtpT2lKVVRrdGFOVVUzVVRjM01VRkdUVEJTTVRBMk15SXNJbVY0Y0NJNk1UY3lPVFExT0RBd015d2ljR0Z5Wlc1MElqb2lZV1J0YVc0aWZRLklTU1doblFxT1JON0hUNWJyWWFvN1BXT1g4TVExOU1paHdxYk9wbExzc3JDMEtvUGhLYnBrdWtHLWYxQ0Q0b1AzYjBNTV8zTWtOSFB3U2s2S2N6VE1nJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZ2ZXJzaW9uSWQ9MWMwMmJmZWItN2NiYS00MDk4LWFjZmYtODM1YTViMGViMGI4JlgtQW16LVNpZ25hdHVyZT00NmUxYTI2MDg4YjQxYzc4ZjVmMzc2NzBmOTc2YzZjMDIwOWRiOGE3ZWM1ZTI5Njc4ODZlZmQ4YjZiYzU4NGU2",
+    description: "Prostrani dom, idealan za razne događaje i okupljanja.",
+    capacity: 135,
+    amenities: ["Audio oprema", "Kuhinja", "Wi-Fi", "Parking"],
+    address: "Ulica Zrinska 2a, Bjelovar",
+    squaring: 171.27,
+    category: "Kat. 1",
+    pricesPerPurpose: [
+        {
+            purposeName: "Vjenčanje",
+            pricePerMeterSquare: 10,
+        },
+        {
+            purposeName: "Rođendan",
+            pricePerMeterSquare: 8,
+        },
+        {
+            purposeName: "Promidžba",
+            pricePerMeterSquare: 6,
+        },
+        {
+            purposeName: "Karmine",
+            pricePerMeterSquare: 5,
+        },
+    ],
+    cutleryRentAmountPerPerson: 0.4,
+    note: "PONEDJELJAK I SRIJEDA- NE IZNAJMLJIVATI",
+    active: true,
+    coordinates: {
+        latitude: 45.897497,
+        longitude: 16.847827,
+    },
+    nonWorkingDays: [
+        {
+            sifra: "1",
+            opis: "UTORAK",
+        },
+        {
+            sifra: "3",
+            opis: "ČETVRTAK",
+        },
+    ],
 };
 
 const CommunityHouseDisplay: React.FC = () => {
@@ -55,11 +91,13 @@ const CommunityHouseDisplay: React.FC = () => {
         setIsAuthDialogOpen(false);
     };
 
+    const url = getAssetUrl(mockHouse.image) || "https://placehold.co/600x400";
+
     return (
         <div className="flex flex-col md:flex-row gap-8 p-8">
             <div className="md:w-1/2">
                 <img
-                    src={mockHouse.image}
+                    src={url}
                     alt={mockHouse.name}
                     className="w-full h-64 object-cover rounded-lg mb-4"
                 />
@@ -89,8 +127,31 @@ const CommunityHouseDisplay: React.FC = () => {
                 <Card>
                     <CardContent className="p-4">
                         <h2 className="text-xl font-semibold mb-4">Rezervacija</h2>
-                        <p className="mb-2">Kapacitet: {mockHouse.capacity} osoba</p>
-                        <p className="mb-4">Cijena po danu: {mockHouse.pricePerDay} kn</p>
+                        <div className="mb-4">
+                            <p className="text-gray-600">Površina:</p>
+                            <p className="text-lg">{mockHouse.squaring} m²</p>
+                        </div>
+                        <div className="mb-4">
+                            <p className="text-gray-600">Kapacitet:</p>
+                            <p className="text-lg">{mockHouse.capacity} osoba</p>
+                        </div>
+                        <div className="mb-4">
+                            <p className="text-gray-600">Kategorija:</p>
+                            <p className="text-lg">{mockHouse.category}</p>
+                        </div>
+                        <div className="mb-4">
+                            <p className="text-gray-600 mb-2">Cijena po kvadratnom metru:</p>
+                            <ul className="space-y-2">
+                                {mockHouse.pricesPerPurpose.map((purpose, index) => (
+                                    <li key={index} className="flex justify-between">
+                                        <span>{purpose.purposeName}:</span>
+                                        <span className="font-semibold">
+                                            {purpose.pricePerMeterSquare} kn/m²
+                                        </span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                         <DateRangeSelector dateRange={dateRange} setDateRange={setDateRange} />
                         <Button className="w-full mt-4" onClick={handleReservation}>
                             Rezerviraj

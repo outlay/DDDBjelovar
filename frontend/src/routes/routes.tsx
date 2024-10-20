@@ -9,6 +9,8 @@ import { UserRole } from "@/models/user";
 import MyReservations from "@/views/applicant/MyReservations";
 import ReservationDetails from "@/views/applicant/ReservationDetails";
 import NovaRezervacija from "@/views/applicant/nova-rezervacija";
+import Zapisnici from "@/views/janitor/Zapisnici";
+import Potpisi from "@/views/mayor/Potpisi";
 
 const ProtectedRoute = ({
     allowedRoles,
@@ -76,7 +78,7 @@ const janitorRoutes = (
             </ProtectedRoute>
         }
     >
-        <Route path="/zathjevi" element={<MyReservations />} />
+        <Route path="/zapisnici" element={<Zapisnici />} />
     </Route>
 );
 
@@ -88,7 +90,7 @@ const mayorRoutes = (
             </ProtectedRoute>
         }
     >
-        <Route path="/zapisnici" element={<MyReservations />} />
+        <Route path="/potpisi" element={<Potpisi />} />
     </Route>
 );
 
