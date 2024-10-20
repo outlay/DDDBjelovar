@@ -90,7 +90,7 @@ const ReservationDetails = () => {
         id,
         name: `Rezervacije #${id}`,
         status: "U procesu",
-        communityHouse: "Dom Kulture",
+        communityHouse: "Dom I MO HRGOVLJANI",
     };
 
     const headerHeight = 80;
