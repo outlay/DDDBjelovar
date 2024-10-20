@@ -56,11 +56,50 @@ const userRoutes = (
     </Route>
 );
 
+const cityRoutes = (
+    <Route
+        element={
+            <ProtectedRoute allowedRoles={[UserRole.ROLE_CITY_SERVICE]}>
+                <Layout></Layout>
+            </ProtectedRoute>
+        }
+    >
+        <Route path="/zahtjevi" element={<MyReservations />} />
+    </Route>
+);
+
+const janitorRoutes = (
+    <Route
+        element={
+            <ProtectedRoute allowedRoles={[UserRole.ROLE_JANITOR, UserRole.ROLE_CITY_SERVICE]}>
+                <Layout></Layout>
+            </ProtectedRoute>
+        }
+    >
+        <Route path="/zathjevi" element={<MyReservations />} />
+    </Route>
+);
+
+const mayorRoutes = (
+    <Route
+        element={
+            <ProtectedRoute allowedRoles={[UserRole.ROLE_MAYOR]}>
+                <Layout></Layout>
+            </ProtectedRoute>
+        }
+    >
+        <Route path="/zapisnici" element={<MyReservations />} />
+    </Route>
+);
+
 const router = createBrowserRouter(
     createRoutesFromElements(
         <>
             {publicRoutes}
             {userRoutes}
+            {cityRoutes}
+            {janitorRoutes}
+            {mayorRoutes}
             <Route path="/unauthorized" element={<ErrorComponent message="Unauthorized" />} />
             <Route path="/403" element={<ErrorComponent message="403 Error | Forbidden" />} />
             <Route path="*" element={<Navigate to="/" replace />} />

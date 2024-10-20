@@ -14,16 +14,19 @@ import {
     CommandList,
 } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { apiClient } from "@/lib/api-client";
+import { CommunityHouseResponse } from "@/models/generated";
 
-const homes = [
-    { label: "Dom 1", value: "dom1" },
-    { label: "Dom 2", value: "dom2" },
-    { label: "Dom 3", value: "dom3" },
-    // Add more homes as needed
-];
 const HomeCombo = () => {
     const [open, setOpen] = React.useState(false);
     const [value, setValue] = React.useState("");
+    const [communityHouses, setCommunityHouses] = React.useState<CommunityHouseResponse[]>([]);
+
+    React.useEffect(() => {
+        apiClient.get<CommunityHouseResponse[]>("/community-houses").then(response => {
+            setCommunityHouses(response as unknown as CommunityHouseResponse[]);
+        });
+    }, []);
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -34,7 +37,9 @@ const HomeCombo = () => {
                     aria-expanded={open}
                     className="w-full justify-between"
                 >
-                    {value ? homes.find(home => home.value === value)?.label : "Odaberi dom..."}
+                    {value
+                        ? communityHouses.find(home => home.id?.toString() === value)?.name
+                        : "Odaberi dom..."}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
@@ -44,10 +49,10 @@ const HomeCombo = () => {
                     <CommandList>
                         <CommandEmpty>Nema pronađenih domova.</CommandEmpty>
                         <CommandGroup>
-                            {homes.map(home => (
+                            {communityHouses.map(home => (
                                 <CommandItem
-                                    key={home.value}
-                                    value={home.value}
+                                    key={home.id}
+                                    value={home.id?.toString()}
                                     onSelect={currentValue => {
                                         setValue(currentValue === value ? "" : currentValue);
                                         setOpen(false);
@@ -56,10 +61,12 @@ const HomeCombo = () => {
                                     <Check
                                         className={cn(
                                             "mr-2 h-4 w-4",
-                                            value === home.value ? "opacity-100" : "opacity-0"
+                                            value === home.id?.toString()
+                                                ? "opacity-100"
+                                                : "opacity-0"
                                         )}
                                     />
-                                    {home.label}
+                                    {home.name}
                                 </CommandItem>
                             ))}
                         </CommandGroup>
