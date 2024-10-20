@@ -243,6 +243,156 @@ export interface LoginRequest {
 /**
  * 
  * @export
+ * @interface ReservationDetailsResponse
+ */
+export interface ReservationDetailsResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof ReservationDetailsResponse
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ReservationDetailsResponse
+     */
+    'communityHouseName'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ReservationDetailsResponse
+     */
+    'purposeId'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ReservationDetailsResponse
+     */
+    'userId'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ReservationDetailsResponse
+     */
+    'reservationAmountId'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ReservationDetailsResponse
+     */
+    'recordId'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ReservationDetailsResponse
+     */
+    'bank'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ReservationDetailsResponse
+     */
+    'iban'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ReservationDetailsResponse
+     */
+    'localBoardName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ReservationDetailsResponse
+     */
+    'issueDate'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ReservationDetailsResponse
+     */
+    'dateTimeFrom'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ReservationDetailsResponse
+     */
+    'dateTimeTo'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ReservationDetailsResponse
+     */
+    'status'?: ReservationDetailsResponseStatusEnum;
+}
+
+export const ReservationDetailsResponseStatusEnum = {
+    ZahtjevPoslan: 'ZAHTJEV_POSLAN',
+    ZahtjevPotvrden: 'ZAHTJEV_POTVRDEN',
+    UgovorNapravljen: 'UGOVOR_NAPRAVLJEN',
+    UgovorPotpisanGradonacelnik: 'UGOVOR_POTPISAN_GRADONACELNIK',
+    UgovorPotpisanStranka: 'UGOVOR_POTPISAN_STRANKA',
+    UgovorPlacen: 'UGOVOR_PLACEN',
+    JamcevinaVracena: 'JAMCEVINA_VRACENA',
+    ZahtjevOtkazan: 'ZAHTJEV_OTKAZAN'
+} as const;
+
+export type ReservationDetailsResponseStatusEnum = typeof ReservationDetailsResponseStatusEnum[keyof typeof ReservationDetailsResponseStatusEnum];
+
+/**
+ * 
+ * @export
+ * @interface ReservationResponse
+ */
+export interface ReservationResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof ReservationResponse
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ReservationResponse
+     */
+    'communityHouseName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ReservationResponse
+     */
+    'dateTimeFrom'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ReservationResponse
+     */
+    'dateTimeTo'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ReservationResponse
+     */
+    'status'?: ReservationResponseStatusEnum;
+}
+
+export const ReservationResponseStatusEnum = {
+    ZahtjevPoslan: 'ZAHTJEV_POSLAN',
+    ZahtjevPotvrden: 'ZAHTJEV_POTVRDEN',
+    UgovorNapravljen: 'UGOVOR_NAPRAVLJEN',
+    UgovorPotpisanGradonacelnik: 'UGOVOR_POTPISAN_GRADONACELNIK',
+    UgovorPotpisanStranka: 'UGOVOR_POTPISAN_STRANKA',
+    UgovorPlacen: 'UGOVOR_PLACEN',
+    JamcevinaVracena: 'JAMCEVINA_VRACENA',
+    ZahtjevOtkazan: 'ZAHTJEV_OTKAZAN'
+} as const;
+
+export type ReservationResponseStatusEnum = typeof ReservationResponseStatusEnum[keyof typeof ReservationResponseStatusEnum];
+
+/**
+ * 
+ * @export
  * @interface SignupRequest
  */
 export interface SignupRequest {
@@ -330,6 +480,88 @@ export const CommunityHousesApiAxiosParamCreator = function (configuration?: Con
     return {
         /**
          * 
+         * @summary Fetches the community house by ID
+         * @param {string} id ID of the community house to fetch
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        fetchCommunityHouseByDates: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('fetchCommunityHouseByDates', 'id', id)
+            const localVarPath = `/api/v1/community-houses/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Fetches the community house by ID if the house is available in those dates, otherwise returns 400
+         * @param {string} id ID of the community house to fetch
+         * @param {string} startDate Start date of the reservation
+         * @param {string} endDate End date of the reservation
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        fetchCommunityHouseByDates1: async (id: string, startDate: string, endDate: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('fetchCommunityHouseByDates1', 'id', id)
+            // verify required parameter 'startDate' is not null or undefined
+            assertParamExists('fetchCommunityHouseByDates1', 'startDate', startDate)
+            // verify required parameter 'endDate' is not null or undefined
+            assertParamExists('fetchCommunityHouseByDates1', 'endDate', endDate)
+            const localVarPath = `/api/v1/community-houses/{id}/availability`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (startDate !== undefined) {
+                localVarQueryParameter['startDate'] = startDate;
+            }
+
+            if (endDate !== undefined) {
+                localVarQueryParameter['endDate'] = endDate;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Fetches all community houses
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -358,6 +590,55 @@ export const CommunityHousesApiAxiosParamCreator = function (configuration?: Con
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Fetches all community houses filtered by capacity, start and end date
+         * @param {string} startDate Start date of the reservation
+         * @param {string} endDate End date of the reservation
+         * @param {string} [capacity] Capacity of the community house
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        fetchCommunityHouses1: async (startDate: string, endDate: string, capacity?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'startDate' is not null or undefined
+            assertParamExists('fetchCommunityHouses1', 'startDate', startDate)
+            // verify required parameter 'endDate' is not null or undefined
+            assertParamExists('fetchCommunityHouses1', 'endDate', endDate)
+            const localVarPath = `/api/v1/community-houses/search`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (startDate !== undefined) {
+                localVarQueryParameter['startDate'] = startDate;
+            }
+
+            if (endDate !== undefined) {
+                localVarQueryParameter['endDate'] = endDate;
+            }
+
+            if (capacity !== undefined) {
+                localVarQueryParameter['capacity'] = capacity;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -370,6 +651,34 @@ export const CommunityHousesApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Fetches the community house by ID
+         * @param {string} id ID of the community house to fetch
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async fetchCommunityHouseByDates(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommunityHouseResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.fetchCommunityHouseByDates(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CommunityHousesApi.fetchCommunityHouseByDates']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Fetches the community house by ID if the house is available in those dates, otherwise returns 400
+         * @param {string} id ID of the community house to fetch
+         * @param {string} startDate Start date of the reservation
+         * @param {string} endDate End date of the reservation
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async fetchCommunityHouseByDates1(id: string, startDate: string, endDate: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CommunityHouseResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.fetchCommunityHouseByDates1(id, startDate, endDate, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CommunityHousesApi.fetchCommunityHouseByDates1']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary Fetches all community houses
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -378,6 +687,21 @@ export const CommunityHousesApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.fetchCommunityHouses(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CommunityHousesApi.fetchCommunityHouses']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Fetches all community houses filtered by capacity, start and end date
+         * @param {string} startDate Start date of the reservation
+         * @param {string} endDate End date of the reservation
+         * @param {string} [capacity] Capacity of the community house
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async fetchCommunityHouses1(startDate: string, endDate: string, capacity?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CommunityHouseResponse>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.fetchCommunityHouses1(startDate, endDate, capacity, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CommunityHousesApi.fetchCommunityHouses1']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -392,12 +716,46 @@ export const CommunityHousesApiFactory = function (configuration?: Configuration
     return {
         /**
          * 
+         * @summary Fetches the community house by ID
+         * @param {string} id ID of the community house to fetch
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        fetchCommunityHouseByDates(id: string, options?: RawAxiosRequestConfig): AxiosPromise<CommunityHouseResponse> {
+            return localVarFp.fetchCommunityHouseByDates(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Fetches the community house by ID if the house is available in those dates, otherwise returns 400
+         * @param {string} id ID of the community house to fetch
+         * @param {string} startDate Start date of the reservation
+         * @param {string} endDate End date of the reservation
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        fetchCommunityHouseByDates1(id: string, startDate: string, endDate: string, options?: RawAxiosRequestConfig): AxiosPromise<CommunityHouseResponse> {
+            return localVarFp.fetchCommunityHouseByDates1(id, startDate, endDate, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Fetches all community houses
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         fetchCommunityHouses(options?: RawAxiosRequestConfig): AxiosPromise<Array<CommunityHouseResponse>> {
             return localVarFp.fetchCommunityHouses(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Fetches all community houses filtered by capacity, start and end date
+         * @param {string} startDate Start date of the reservation
+         * @param {string} endDate End date of the reservation
+         * @param {string} [capacity] Capacity of the community house
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        fetchCommunityHouses1(startDate: string, endDate: string, capacity?: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<CommunityHouseResponse>> {
+            return localVarFp.fetchCommunityHouses1(startDate, endDate, capacity, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -411,6 +769,32 @@ export const CommunityHousesApiFactory = function (configuration?: Configuration
 export class CommunityHousesApi extends BaseAPI {
     /**
      * 
+     * @summary Fetches the community house by ID
+     * @param {string} id ID of the community house to fetch
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CommunityHousesApi
+     */
+    public fetchCommunityHouseByDates(id: string, options?: RawAxiosRequestConfig) {
+        return CommunityHousesApiFp(this.configuration).fetchCommunityHouseByDates(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Fetches the community house by ID if the house is available in those dates, otherwise returns 400
+     * @param {string} id ID of the community house to fetch
+     * @param {string} startDate Start date of the reservation
+     * @param {string} endDate End date of the reservation
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CommunityHousesApi
+     */
+    public fetchCommunityHouseByDates1(id: string, startDate: string, endDate: string, options?: RawAxiosRequestConfig) {
+        return CommunityHousesApiFp(this.configuration).fetchCommunityHouseByDates1(id, startDate, endDate, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary Fetches all community houses
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -418,6 +802,190 @@ export class CommunityHousesApi extends BaseAPI {
      */
     public fetchCommunityHouses(options?: RawAxiosRequestConfig) {
         return CommunityHousesApiFp(this.configuration).fetchCommunityHouses(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Fetches all community houses filtered by capacity, start and end date
+     * @param {string} startDate Start date of the reservation
+     * @param {string} endDate End date of the reservation
+     * @param {string} [capacity] Capacity of the community house
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CommunityHousesApi
+     */
+    public fetchCommunityHouses1(startDate: string, endDate: string, capacity?: string, options?: RawAxiosRequestConfig) {
+        return CommunityHousesApiFp(this.configuration).fetchCommunityHouses1(startDate, endDate, capacity, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * ReservationsApi - axios parameter creator
+ * @export
+ */
+export const ReservationsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Fetches the reservation details by id
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        fetchReservationById: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('fetchReservationById', 'id', id)
+            const localVarPath = `/api/v1/reservations/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Fetches the reservations of a specific user by its id
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        fetchReservationsByUserId: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/reservations/reservations/user`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ReservationsApi - functional programming interface
+ * @export
+ */
+export const ReservationsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ReservationsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Fetches the reservation details by id
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async fetchReservationById(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReservationDetailsResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.fetchReservationById(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ReservationsApi.fetchReservationById']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Fetches the reservations of a specific user by its id
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async fetchReservationsByUserId(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ReservationResponse>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.fetchReservationsByUserId(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ReservationsApi.fetchReservationsByUserId']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * ReservationsApi - factory interface
+ * @export
+ */
+export const ReservationsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ReservationsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Fetches the reservation details by id
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        fetchReservationById(id: number, options?: RawAxiosRequestConfig): AxiosPromise<ReservationDetailsResponse> {
+            return localVarFp.fetchReservationById(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Fetches the reservations of a specific user by its id
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        fetchReservationsByUserId(options?: RawAxiosRequestConfig): AxiosPromise<Array<ReservationResponse>> {
+            return localVarFp.fetchReservationsByUserId(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * ReservationsApi - object-oriented interface
+ * @export
+ * @class ReservationsApi
+ * @extends {BaseAPI}
+ */
+export class ReservationsApi extends BaseAPI {
+    /**
+     * 
+     * @summary Fetches the reservation details by id
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ReservationsApi
+     */
+    public fetchReservationById(id: number, options?: RawAxiosRequestConfig) {
+        return ReservationsApiFp(this.configuration).fetchReservationById(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Fetches the reservations of a specific user by its id
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ReservationsApi
+     */
+    public fetchReservationsByUserId(options?: RawAxiosRequestConfig) {
+        return ReservationsApiFp(this.configuration).fetchReservationsByUserId(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
