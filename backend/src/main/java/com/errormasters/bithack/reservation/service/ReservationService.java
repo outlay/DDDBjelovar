@@ -80,7 +80,7 @@ public class ReservationService {
                 throw new OverlappingReservationException("Traženi društveni dom nije dostupan u željenom periodu");
             }
         } else {
-            throw new CommunityHouseNotFoundException("Ne postoji traženi društveni doma");
+            throw new CommunityHouseNotFoundException("Ne postoji traženi društveni dom");
         }
     }
 }
