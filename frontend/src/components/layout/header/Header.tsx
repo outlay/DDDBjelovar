@@ -59,6 +59,16 @@ const Header = () => {
                         <span className="text-lg text-blue-800">Moje rezervacije</span>
                     </Link>
                 )}
+                {role === UserRole.ROLE_JANITOR && (
+                    <Link to="/zapisnici">
+                        <span className="text-lg text-blue-800">Zapisnici</span>
+                    </Link>
+                )}
+                {role === UserRole.ROLE_MAYOR && (
+                    <Link to="/potpisi">
+                        <span className="text-lg text-blue-800">Potpisi</span>
+                    </Link>
+                )}
             </div>
 
             <nav className="flex space-x-4 items-center">
