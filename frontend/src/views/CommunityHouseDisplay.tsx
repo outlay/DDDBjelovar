@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import * as React from "react";
+import { useState } from "react";
 import {
     Accordion,
     AccordionContent,
@@ -10,8 +11,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import DateRangeSelector from "@/components/DateRangeSelector";
 import { DateRange } from "react-day-picker";
+import { useApp } from "@/routes/app-context";
+import { useNavigate } from "react-router-dom";
+import { Toast } from "@/components/ui/toast";
+import AuthDialog from "@/components/auth/AuthDialog";
 
-// Mock data for a community house
+// Mock data za društveni dom (ostaje isto)
 const mockHouse = {
     id: 1,
     name: "Dom Kulture",
@@ -25,6 +30,30 @@ const mockHouse = {
 
 const CommunityHouseDisplay: React.FC = () => {
     const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
+    const [isAuthDialogOpen, setIsAuthDialogOpen] = useState<boolean>(false);
+    const { jwtResponse } = useApp();
+    const navigate = useNavigate();
+
+    const handleReservation = () => {
+        if (!dateRange || !dateRange.from || !dateRange.to) {
+            Toast({
+                title: "Odaberite datum",
+                description: "Molimo odaberite datum za rezervaciju.",
+                variant: "destructive",
+            });
+            return;
+        }
+
+        if (!jwtResponse) {
+            setIsAuthDialogOpen(true);
+        } else {
+            navigate("/nova-rezervacija", { state: { dateRange, houseId: mockHouse.id } });
+        }
+    };
+
+    const handleAuthDialogClose = () => {
+        setIsAuthDialogOpen(false);
+    };
 
     return (
         <div className="flex flex-col md:flex-row gap-8 p-8">
@@ -63,10 +92,14 @@ const CommunityHouseDisplay: React.FC = () => {
                         <p className="mb-2">Kapacitet: {mockHouse.capacity} osoba</p>
                         <p className="mb-4">Cijena po danu: {mockHouse.pricePerDay} kn</p>
                         <DateRangeSelector dateRange={dateRange} setDateRange={setDateRange} />
-                        <Button className="w-full mt-4">Rezerviraj</Button>
+                        <Button className="w-full mt-4" onClick={handleReservation}>
+                            Rezerviraj
+                        </Button>
                     </CardContent>
                 </Card>
             </div>
+
+            <AuthDialog isOpen={isAuthDialogOpen} onClose={handleAuthDialogClose} />
         </div>
     );
 };
