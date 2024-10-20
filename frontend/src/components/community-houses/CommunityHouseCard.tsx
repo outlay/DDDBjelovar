@@ -6,7 +6,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -17,18 +17,11 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { useNavigate } from "react-router-dom";
-
-interface CommunityHouse {
-    id: number;
-    name: string;
-    image: string;
-    description: string;
-    capacity: number;
-    amenities: string[];
-}
+import { CommunityHouseResponse } from "@/models/generated";
+import { getAssetUrl } from "@/lib/utils";
 
 interface CommunityHouseCardProps {
-    house: CommunityHouse;
+    house: CommunityHouseResponse;
 }
 
 const CommunityHouseCard: React.FC<CommunityHouseCardProps> = ({ house }) => {
@@ -38,22 +31,19 @@ const CommunityHouseCard: React.FC<CommunityHouseCardProps> = ({ house }) => {
         navigate(`/dom/${house.id}`);
     };
 
+    const imageUrl = getAssetUrl(house.images?.[0]?.url || "") || "https://placehold.co/600x400";
+
     return (
         <Card className="w-[300px] rounded-lg overflow-hidden">
-            <img src={house.image} alt={house.name} className="w-full h-40 object-cover" />
+            <img src={imageUrl} alt={house.name} className="w-full h-40 object-cover" />
             <CardHeader>
                 <CardTitle>{house.name}</CardTitle>
-                <CardDescription>{house.description}</CardDescription>
+                <CardDescription>{house.address}</CardDescription>
             </CardHeader>
             <CardContent>
-                <p>Kapacitet: {house.capacity}</p>
-                <div className="flex flex-wrap gap-1 mt-2">
-                    {house.amenities.map((amenity, index) => (
-                        <Badge key={index} variant="secondary">
-                            {amenity}
-                        </Badge>
-                    ))}
-                </div>
+                <p>Kapacitet: {house.approxNumberOfOccupants}</p>
+                <p>Kategorija: {house.category}</p>
+                <p>Površina: {house.squaring} m²</p>
             </CardContent>
             <CardFooter>
                 <Dialog>
@@ -63,21 +53,20 @@ const CommunityHouseCard: React.FC<CommunityHouseCardProps> = ({ house }) => {
                     <DialogContent>
                         <DialogHeader>
                             <DialogTitle>{house.name}</DialogTitle>
-                            <DialogDescription>{house.description}</DialogDescription>
+                            <DialogDescription>{house.address}</DialogDescription>
                         </DialogHeader>
                         <img
-                            src={house.image}
+                            src={imageUrl}
                             alt={house.name}
                             className="w-full h-64 object-cover rounded-md"
                         />
-                        <p>Kapacitet: {house.capacity}</p>
-                        <div className="flex flex-wrap gap-1 mt-2">
-                            {house.amenities.map((amenity, index) => (
-                                <Badge key={index} variant="secondary">
-                                    {amenity}
-                                </Badge>
-                            ))}
-                        </div>
+                        <p>Kapacitet: {house.approxNumberOfOccupants}</p>
+                        <p>Kategorija: {house.category}</p>
+                        <p>Površina: {house.squaring} m²</p>
+                        {house.cutleryRentAmountPerPerson && (
+                            <p>Najam pribora po osobi: {house.cutleryRentAmountPerPerson} KM</p>
+                        )}
+                        {house.note && <p>Napomena: {house.note}</p>}
                         <Button className="mt-4" variant="default" onClick={handleCheckReservation}>
                             Provjera rezervacije
                         </Button>
@@ -88,4 +77,5 @@ const CommunityHouseCard: React.FC<CommunityHouseCardProps> = ({ house }) => {
     );
 };
 
-export { CommunityHouseCard, type CommunityHouse };
+export { CommunityHouseCard };
+export type { CommunityHouseResponse };
