@@ -1,15 +1,15 @@
 package com.errormasters.bithack.reservation.api;
 
+import com.errormasters.bithack.reservation.dto.ReservationConfirmationResponse;
 import com.errormasters.bithack.reservation.dto.ReservationDetailsResponse;
+import com.errormasters.bithack.reservation.dto.ReservationRequest;
 import com.errormasters.bithack.reservation.dto.ReservationResponse;
 import com.errormasters.bithack.reservation.model.Reservation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,4 +27,8 @@ public interface ReservationApi {
     @GetMapping("/{id}")
     @Operation(summary = "Fetches the reservation details by id")
     ResponseEntity<ReservationDetailsResponse> fetchReservationById(@PathVariable Long id);
+
+    @PostMapping
+    @Operation(summary = "Creates a reservation for a specific community house")
+    ResponseEntity<ReservationConfirmationResponse> createReservation(@RequestBody ReservationRequest reservationRequest);
 }

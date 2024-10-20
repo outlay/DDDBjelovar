@@ -7,7 +7,9 @@ public enum ApplicantEndpoints {
             V1 + RESERVATIONS_BY_USER,
             V1 + RESERVATIONS + "/*"
     ),
-    POST (),
+    POST (
+            V1 + RESERVATIONS
+    ),
     DELETE ();
 
     private final String[] endpoints;

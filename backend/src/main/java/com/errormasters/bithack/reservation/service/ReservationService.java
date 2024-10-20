@@ -1,8 +1,17 @@
 package com.errormasters.bithack.reservation.service;
 
+import com.errormasters.bithack.house.exception.CommunityHouseNotFoundException;
+import com.errormasters.bithack.house.exception.OverlappingReservationException;
+import com.errormasters.bithack.house.model.CommunityHouse;
+import com.errormasters.bithack.house.repository.CommunityHouseRepository;
+import com.errormasters.bithack.reservation.dto.ReservationConfirmationResponse;
+import com.errormasters.bithack.reservation.dto.ReservationRequest;
+import com.errormasters.bithack.reservation.dto.ReservationResponse;
 import com.errormasters.bithack.reservation.exception.ReservationAccessDeniedException;
 import com.errormasters.bithack.reservation.exception.ReservationNotFoundException;
+import com.errormasters.bithack.reservation.mapper.ReservationMapper;
 import com.errormasters.bithack.reservation.model.Reservation;
+import com.errormasters.bithack.reservation.model.ReservationStatusEnum;
 import com.errormasters.bithack.reservation.repository.ReservationRepository;
 import com.errormasters.bithack.security.entity.User;
 import com.errormasters.bithack.security.entity.pojo.RoleEnum;
@@ -22,7 +31,11 @@ import java.util.Optional;
 public class ReservationService {
     private final ReservationRepository reservationRepository;
 
+    private final CommunityHouseRepository communityHouseRepository;
+
     private final UserService userService;
+
+    private final ReservationMapper reservationMapper;
 
     public List<Reservation> getAllReservationsByUserId() {
         return reservationRepository.findAllByUserId(UserUtil.getCurrentUserId());
@@ -49,6 +62,25 @@ public class ReservationService {
             }
         } else {
             throw new ReservationNotFoundException("Rezervacija nije pronađena");
+        }
+    }
+
+    public ReservationConfirmationResponse createReservation(ReservationRequest reservationRequest) {
+        Optional<CommunityHouse> communityHouse = communityHouseRepository.findByName(reservationRequest.communityHouseName());
+        if (communityHouse.isPresent()) {
+            if (reservationRepository.existsOverlappingReservation(communityHouse.get().getId(),
+                    reservationRequest.dateTimeFrom(), reservationRequest.dateTimeTo(), ReservationStatusEnum.ZAHTJEV_OTKAZAN)) {
+                Reservation reservation = reservationMapper.mapToReservation(reservationRequest);
+                reservation.setCommunityHouse(communityHouse.get());
+                reservation.setStatus(ReservationStatusEnum.ZAHTJEV_POSLAN);
+                reservation.setUserId(UserUtil.getCurrentUserId());
+                Reservation savedReservation = reservationRepository.save(reservation);
+                return new ReservationConfirmationResponse(savedReservation.getId(), "Zahtjev za rezervacijom je uspješno poslan");
+            } else {
+                throw new OverlappingReservationException("Traženi društveni dom nije dostupan u željenom periodu");
+            }
+        } else {
+            throw new CommunityHouseNotFoundException("Ne postoji traženi društveni doma");
         }
     }
 }

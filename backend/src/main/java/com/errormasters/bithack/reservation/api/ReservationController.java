@@ -1,6 +1,8 @@
 package com.errormasters.bithack.reservation.api;
 
+import com.errormasters.bithack.reservation.dto.ReservationConfirmationResponse;
 import com.errormasters.bithack.reservation.dto.ReservationDetailsResponse;
+import com.errormasters.bithack.reservation.dto.ReservationRequest;
 import com.errormasters.bithack.reservation.dto.ReservationResponse;
 import com.errormasters.bithack.reservation.mapper.ReservationMapper;
 import com.errormasters.bithack.reservation.service.ReservationService;
@@ -37,5 +39,12 @@ public class ReservationController implements ReservationApi {
         var reservation = reservationService.getReservationById(id);
 
         return ResponseEntity.ok((reservationMapper.mapToReservationDetailsResponse(reservation)));
+    }
+
+    @Override
+    public ResponseEntity<ReservationConfirmationResponse> createReservation(ReservationRequest reservationRequest) {
+        var reservationConfirmation = reservationService.createReservation(reservationRequest);
+
+        return ResponseEntity.ok(reservationConfirmation);
     }
 }
