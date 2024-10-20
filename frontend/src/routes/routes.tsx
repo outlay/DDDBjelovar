@@ -8,6 +8,7 @@ import { useApp } from "./app-context";
 import { UserRole } from "@/models/user";
 import MyReservations from "@/views/applicant/MyReservations";
 import ReservationDetails from "@/views/applicant/ReservationDetails";
+import NovaRezervacija from "@/views/applicant/nova-rezervacija";
 
 const ProtectedRoute = ({
     allowedRoles,
@@ -49,6 +50,7 @@ const userRoutes = (
             </ProtectedRoute>
         }
     >
+        <Route path="/nova-rezervacija" element={<NovaRezervacija />} />
         <Route path="/rezervacije" element={<MyReservations />} />
         <Route path="/rezervacije/:id" element={<ReservationDetails />} />
     </Route>
